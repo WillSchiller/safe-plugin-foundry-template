@@ -2,5 +2,14 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+fs_permissions = [{ access = "read", path = "./"}]
+
+remappings = [
+    '@safe-global/safe-core-protocol=lib/safe-core-protocol', 
+    '@safe-contracts=lib/safe-contracts',
+    '@openzeppelin=lib/openzeppelin-contracts',
+    '@gelatonetwork/relay-context/contracts=lib/relay-context-contracts/contracts',
+    
+    ]
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
