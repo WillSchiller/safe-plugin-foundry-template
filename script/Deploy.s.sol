@@ -16,48 +16,12 @@ contract Deploy is Script {
     address owner = vm.envAddress("SAFE_OWNER_ADDRESS");
     SafeTxConfig safeTxConfig = new SafeTxConfig();
     SafeTxConfig.Config config = safeTxConfig.run();
-
-    function run() public {
-        vm.startBroadcast(vm.envUint("SAFE_OWNER_PRIVATE_KEY"));
-
-        DeployContracts contracts = new DeployContracts();
-        (Plugin plugin, SafeProtocolManager manager, SafeProtocolRegistry registry) = contracts.run(owner);
-
-        bytes32 txHash = getTransactionHash(
-            address(safe), 
-            abi.encodeWithSignature("enableModule(address)", address(manager))
-        );
-
-        (uint8 v, bytes32 r, bytes32 s) = vm.sign(vm.envUint("SAFE_OWNER_PRIVATE_KEY"), txHash);
-
-        sendSafeTx(
-            address(safe), 
-            abi.encodeWithSignature("enableModule(address)", address(manager)), 
-            abi.encodePacked(r, s, v)
-        );
-
-        registry.addIntegration(address(plugin), config.integrationType);
-
-        txHash = getTransactionHash(
-            address(manager), 
-            abi.encodeWithSignature("enablePlugin(address,bool)", address(plugin), false)
-        );
-
-        (v, r, s) = vm.sign(vm.envUint("SAFE_OWNER_PRIVATE_KEY"), txHash);
-
-        sendSafeTx(
-            address(manager),
-            abi.encodeWithSignature("enablePlugin(address,bool)", address(plugin), false),
-            abi.encodePacked(r, s, v)
-        );
-
-        vm.stopBroadcast();
-    }
+    DeployContracts contracts = new DeployContracts();
 
     function getTransactionHash(address _to, bytes memory _data) public view returns (bytes32) {
         return safe.getTransactionHash(
             _to,
-            0,
+            config.value,
             _data,
             config.operation,
             config.safeTxGas,
@@ -71,18 +35,35 @@ contract Deploy is Script {
 
     function sendSafeTx(address _to, bytes memory _data, bytes memory sig) public {
         try safe.execTransaction(
-            _to,                
-            config.value,                  
-            _data,              
-            config.operation,   
-            config.safeTxGas,            
-            config.baseGas, 
-            config.gasPrice, 
-            config.gasToken, 
+            _to,
+            config.value,
+            _data,
+            config.operation,
+            config.safeTxGas,
+            config.baseGas,
+            config.gasPrice,
+            config.gasToken,
             config.refundReceiver,
             sig //sig
-        ) {} catch (bytes memory reason) {
+        ){} catch (bytes memory reason) {
             revert SafeTxFailure(reason);
         }
+    }
+
+    function run() public {
+        vm.startBroadcast(vm.envUint("SAFE_OWNER_PRIVATE_KEY"));
+        
+        (Plugin plugin, SafeProtocolManager manager, SafeProtocolRegistry registry) = contracts.run(owner);
+        registry.addIntegration(address(plugin), config.integrationType);
+
+        bytes32 txHash = getTransactionHash(address(safe), abi.encodeWithSignature("enableModule(address)", address(manager)));
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(vm.envUint("SAFE_OWNER_PRIVATE_KEY"), txHash);
+        sendSafeTx(address(safe), abi.encodeWithSignature("enableModule(address)", address(manager)), abi.encodePacked(r, s, v));
+
+        txHash = getTransactionHash(address(manager), abi.encodeWithSignature("enablePlugin(address,bool)", address(plugin), false));
+        (v, r, s) = vm.sign(vm.envUint("SAFE_OWNER_PRIVATE_KEY"), txHash);
+        sendSafeTx(address(manager), abi.encodeWithSignature("enablePlugin(address,bool)", address(plugin), false), abi.encodePacked(r, s, v));
+
+        vm.stopBroadcast();
     }
 }

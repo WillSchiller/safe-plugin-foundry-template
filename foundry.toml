@@ -9,6 +9,7 @@ remappings = [
     '@safe-contracts=lib/safe-contracts',
     '@openzeppelin=lib/openzeppelin-contracts',
     '@gelatonetwork/relay-context/contracts=lib/relay-context-contracts/contracts',
+    '@foundry-devops=lib/foundry-devops',
     
     ]
 
