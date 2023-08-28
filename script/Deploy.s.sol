@@ -1,10 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
+/**
+ * @title Deployer contract for Safe{Core} Protocol Plugin
+ * @author @willschiller
+ * @notice This contract deploys a plugin and registers it with the Safe{Core} Protocol.
+ * @dev set the following environment variables in .env: 
+ * safeAddress (The address of your safe), 
+ * safeOwnerAddress (An EOA that is a owner of your dafe), 
+ * safeOwnerPrivateKey (The EOA key) In production, you should not keep your private key in the env. 
+ * @dev The script will deploy a plugin, register it with the protocol, and enable it for your safe.
+ */
+
 import "forge-std/Script.sol";
-import {SafeProtocolManager} from "@safe-global/safe-core-protocol/contracts/SafeProtocolManager.sol";
-import {SafeProtocolRegistry} from "@safe-global/safe-core-protocol/contracts/SafeProtocolRegistry.sol";
-import {Safe} from "@safe-contracts/contracts/Safe.sol";
+import {SafeProtocolManager} from "@safe/SafeProtocolManager.sol";
+import {SafeProtocolRegistry} from "@safe/SafeProtocolRegistry.sol";
+import {Safe} from "@safe/Safe.sol";
 import {Plugin} from "../src/Plugin.sol";
 import {DeployContracts} from "./utils/DeployContracts.s.sol";
 import {SafeTxConfig} from "./utils/SafeTxConfig.s.sol";

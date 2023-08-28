@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
-import {Enum} from "@safe-contracts/contracts/common/Enum.sol";
+import {Enum} from "@safe/common/Enum.sol";
 
 contract SafeTxConfig is Script {
     struct Config {

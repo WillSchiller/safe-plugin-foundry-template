@@ -2,8 +2,8 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
-import {SafeProtocolRegistry} from "@safe-global/safe-core-protocol/contracts/SafeProtocolRegistry.sol";
-import {SafeProtocolManager} from "@safe-global/safe-core-protocol/contracts/SafeProtocolManager.sol";
+import {SafeProtocolRegistry} from "@safe/SafeProtocolRegistry.sol";
+import {SafeProtocolManager} from "@safe/SafeProtocolManager.sol";
 import {Plugin} from "../../src/Plugin.sol";
 
 contract DeployContracts is Script {

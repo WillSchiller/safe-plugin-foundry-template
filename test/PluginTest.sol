@@ -2,21 +2,30 @@
 pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
-import {SafeProtocolManager} from "@safe-global/safe-core-protocol/contracts/SafeProtocolManager.sol";
-import {ISafe} from "@safe-global/safe-core-protocol/contracts/interfaces/Accounts.sol";
-import {SafeProtocolRegistry} from "@safe-global/safe-core-protocol/contracts/SafeProtocolRegistry.sol";
-import {SafeTransaction, SafeProtocolAction} from "@safe-global/safe-core-protocol/contracts/DataTypes.sol";
-import {Safe} from "@safe-contracts/contracts/Safe.sol";
-import {SafeProxy} from "@safe-contracts/contracts/proxies/SafeProxy.sol";
-import {TokenCallbackHandler} from "@safe-contracts/contracts/handler/TokenCallbackHandler.sol";
+import {SafeProtocolManager} from "@safe/SafeProtocolManager.sol";
+import {ISafe} from "@safe/interfaces/Accounts.sol";
+import {SafeProtocolRegistry} from "@safe/SafeProtocolRegistry.sol";
+import {SafeTransaction, SafeProtocolAction} from "@safe/DataTypes.sol";
+import {Safe} from "@safe/Safe.sol";
+import {SafeProxy} from "@safe/proxies/SafeProxy.sol";
+import {TokenCallbackHandler} from "@safe/handler/TokenCallbackHandler.sol";
 import {Plugin} from "../src/Plugin.sol";
-import {Enum} from "@safe-contracts/contracts/common/Enum.sol";
+import {Enum} from "@safe/common/Enum.sol";
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {Deploy} from "../script/Deploy.s.sol";
 import {SafeTxConfig} from "../script/utils/SafeTxConfig.s.sol";
+
 /**
  * @title Foundry Test Setup for Safe Plugin
- * @author Will Schiller
+ * @author @willschiller
+ * @notice This Test contract sets up an entirely fresh Safe{Core} Protocol instance with plugin and handles all the regitration. 
+ * (Deploys Safe, Manager, Registery & Plugin). This allows you to test locally without forking or sending testnet transaction.
+ * @dev set the following environment variables in .env: 
+ * safeAddress (The address of your safe), 
+ * safeOwnerAddress (An EOA that is a owner of your dafe), 
+ * safeOwnerPrivateKey (The EOA key) In production, you should not keep your private key in the env.
+ * @dev One test is included to check that the plugin is enabled for the safe correctly. 
+ * @dev Entend with your own tests. 
  */
 
 contract PluginTest is Test {
@@ -92,11 +101,5 @@ contract PluginTest is Test {
     function testisPluginEnabled() public {
         bool enabled = manager.isPluginEnabled(address(safe),address(plugin));
         assertEq(enabled, true);
-        /**
-         *  SafeProtocolAction[] memory actions = new SafeProtocolAction[](2);
-         *         actions[0].to = payable(address(manager));
-         *         actions[0].value = 0;
-         *         actions[0].data = abi.encodeWithSignature("enablePlugin(address,bool)", address(plugin), false);
-         */
     }
 }

@@ -5,6 +5,7 @@ libs = ["lib"]
 fs_permissions = [{ access = "read", path = "./"}]
 
 remappings = [
+    '@safe=src/safe',
     '@safe-global/safe-core-protocol=lib/safe-core-protocol', 
     '@safe-contracts=lib/safe-contracts',
     '@openzeppelin=lib/openzeppelin-contracts',
