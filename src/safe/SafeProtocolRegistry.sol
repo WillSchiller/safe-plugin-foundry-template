@@ -73,7 +73,7 @@ contract SafeProtocolRegistry is ISafeProtocolRegistry, Ownable2Step {
         emit IntegrationFlagged(integration);
     }
 
-    function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
+    function supportsInterface(bytes4 interfaceId) external pure override returns (bool) {
         return interfaceId == type(ISafeProtocolRegistry).interfaceId || interfaceId == type(IERC165).interfaceId;
     }
 }

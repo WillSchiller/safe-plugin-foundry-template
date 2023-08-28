@@ -4,7 +4,7 @@ pragma solidity ^0.8.19;
 /**
  * @title Deployer contract for Safe{Core} Protocol Plugin
  * @author @willschiller
- * @notice This contract deploys a plugin and registers it with the Safe{Core} Protocol.
+ * @notice This contract deploys a plugin and registers it with the newly deployed Safe{Core} Protocol contracts.
  * @dev set the following environment variables in .env: 
  * safeAddress (The address of your safe), 
  * safeOwnerAddress (An EOA that is a owner of your dafe), 
