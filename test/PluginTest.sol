@@ -21,15 +21,16 @@ import {SafeTxConfig} from "../script/utils/SafeTxConfig.s.sol";
  * @notice This Test contract sets up an entirely fresh Safe{Core} Protocol instance with plugin and handles all the regitration.
  * (Deploys Safe, Manager, Registery & Plugin). This allows you to test locally without forking or sending testnet transaction.
  * @dev set the following environment variables in .env:
- * safeAddress (The address of your safe),
- * safeOwnerAddress (An EOA that is a owner of your dafe),
- * safeOwnerPrivateKey (The EOA key) In production, you should not keep your private key in the env.
+ *  SAFE_ADDRESS (The address of your safe),
+ *  SAFE_OWNER_ADDRESS (An EOA that is an owner of your safe),
+ *  SAFE_OWNER_PRIVATE_KEY (The EOA key) In production, you should not keep your private key in the env.
  * @dev One test is included to check that the plugin is enabled for the safe correctly.
- * @dev Entend with your own tests.
+ * @dev Extend with your own tests.
  */
 
 contract PluginTest is Test {
     error SafeTxFailure(bytes reason);
+
     address owner = vm.envAddress("SAFE_OWNER_ADDRESS");
     Safe singleton;
     SafeProxy proxy;
